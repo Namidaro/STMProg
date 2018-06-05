@@ -30,10 +30,10 @@
         {
             this._openFirmwareFileDialog = new System.Windows.Forms.OpenFileDialog();
             this._progPanel = new System.Windows.Forms.Panel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this._firmwareFileName = new System.Windows.Forms.Label();
+            this._deviceList = new System.Windows.Forms.ComboBox();
             this._openFirmwareFile = new System.Windows.Forms.Button();
             this._outputRichTextBox = new System.Windows.Forms.RichTextBox();
-            this._firmwareFileName = new System.Windows.Forms.Label();
             this._progPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -45,7 +45,7 @@
             // 
             this._progPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._progPanel.Controls.Add(this._firmwareFileName);
-            this._progPanel.Controls.Add(this.comboBox1);
+            this._progPanel.Controls.Add(this._deviceList);
             this._progPanel.Controls.Add(this._openFirmwareFile);
             this._progPanel.Controls.Add(this._outputRichTextBox);
             this._progPanel.Location = new System.Drawing.Point(23, 73);
@@ -53,13 +53,22 @@
             this._progPanel.Size = new System.Drawing.Size(760, 337);
             this._progPanel.TabIndex = 0;
             // 
-            // comboBox1
+            // _firmwareFileName
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(5, 3);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 2;
+            this._firmwareFileName.AutoSize = true;
+            this._firmwareFileName.Location = new System.Drawing.Point(233, 8);
+            this._firmwareFileName.Name = "_firmwareFileName";
+            this._firmwareFileName.Size = new System.Drawing.Size(93, 13);
+            this._firmwareFileName.TabIndex = 3;
+            this._firmwareFileName.Text = "FirmwareFileName";
+            // 
+            // _deviceList
+            // 
+            this._deviceList.FormattingEnabled = true;
+            this._deviceList.Location = new System.Drawing.Point(5, 3);
+            this._deviceList.Name = "_deviceList";
+            this._deviceList.Size = new System.Drawing.Size(121, 21);
+            this._deviceList.TabIndex = 2;
             // 
             // _openFirmwareFile
             // 
@@ -84,15 +93,6 @@
             this._outputRichTextBox.TabStop = false;
             this._outputRichTextBox.Text = "";
             // 
-            // _firmwareFileName
-            // 
-            this._firmwareFileName.AutoSize = true;
-            this._firmwareFileName.Location = new System.Drawing.Point(233, 8);
-            this._firmwareFileName.Name = "_firmwareFileName";
-            this._firmwareFileName.Size = new System.Drawing.Size(93, 13);
-            this._firmwareFileName.TabIndex = 3;
-            this._firmwareFileName.Text = "FirmwareFileName";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -113,7 +113,7 @@
         private System.Windows.Forms.Panel _progPanel;
         private System.Windows.Forms.RichTextBox _outputRichTextBox;
         private System.Windows.Forms.Button _openFirmwareFile;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox _deviceList;
         private System.Windows.Forms.Label _firmwareFileName;
     }
 }

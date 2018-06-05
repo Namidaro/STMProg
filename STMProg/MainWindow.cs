@@ -14,6 +14,7 @@ namespace STMProg
 {
     public partial class MainWindow : MetroForm
     {
+        private List<string> _deviceCollection;
         private static bool is64Bit = System.Environment.Is64BitOperatingSystem;
 
         public MainWindow()
@@ -21,9 +22,14 @@ namespace STMProg
             InitializeComponent();
             _outputRichTextBox.Clear();
             _firmwareFileName.ResetText();
-
+            InitializeDeviceCollection();
+            //_deviceList.Items = DevicesToOperate;
         }
 
+        private void InitializeDeviceCollection()
+        {
+            
+        }
 
         private void OnOpenFirmwareFileCommand()
         {
