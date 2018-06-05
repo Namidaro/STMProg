@@ -30,10 +30,11 @@
         {
             this._openFirmwareFileDialog = new System.Windows.Forms.OpenFileDialog();
             this._progPanel = new System.Windows.Forms.Panel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this._openFirmwareFile = new System.Windows.Forms.Button();
-            this._outputRichTextBox = new System.Windows.Forms.RichTextBox();
             this._firmwareFileName = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this._openFirmwareFileButton = new System.Windows.Forms.Button();
+            this._outputRichTextBox = new System.Windows.Forms.RichTextBox();
+            this._burnFirmwareButton = new System.Windows.Forms.Button();
             this._progPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,14 +45,24 @@
             // _progPanel
             // 
             this._progPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._progPanel.Controls.Add(this._burnFirmwareButton);
             this._progPanel.Controls.Add(this._firmwareFileName);
             this._progPanel.Controls.Add(this.comboBox1);
-            this._progPanel.Controls.Add(this._openFirmwareFile);
+            this._progPanel.Controls.Add(this._openFirmwareFileButton);
             this._progPanel.Controls.Add(this._outputRichTextBox);
             this._progPanel.Location = new System.Drawing.Point(23, 73);
             this._progPanel.Name = "_progPanel";
             this._progPanel.Size = new System.Drawing.Size(760, 337);
             this._progPanel.TabIndex = 0;
+            // 
+            // _firmwareFileName
+            // 
+            this._firmwareFileName.AutoSize = true;
+            this._firmwareFileName.Location = new System.Drawing.Point(233, 8);
+            this._firmwareFileName.Name = "_firmwareFileName";
+            this._firmwareFileName.Size = new System.Drawing.Size(93, 13);
+            this._firmwareFileName.TabIndex = 3;
+            this._firmwareFileName.Text = "FirmwareFileName";
             // 
             // comboBox1
             // 
@@ -61,15 +72,15 @@
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 2;
             // 
-            // _openFirmwareFile
+            // _openFirmwareFileButton
             // 
-            this._openFirmwareFile.Location = new System.Drawing.Point(132, 3);
-            this._openFirmwareFile.Name = "_openFirmwareFile";
-            this._openFirmwareFile.Size = new System.Drawing.Size(95, 21);
-            this._openFirmwareFile.TabIndex = 1;
-            this._openFirmwareFile.Text = "Выбрать файл";
-            this._openFirmwareFile.UseVisualStyleBackColor = true;
-            this._openFirmwareFile.Click += new System.EventHandler(this._openFirmwareFile_Click);
+            this._openFirmwareFileButton.Location = new System.Drawing.Point(132, 3);
+            this._openFirmwareFileButton.Name = "_openFirmwareFileButton";
+            this._openFirmwareFileButton.Size = new System.Drawing.Size(95, 21);
+            this._openFirmwareFileButton.TabIndex = 1;
+            this._openFirmwareFileButton.Text = "Выбрать файл";
+            this._openFirmwareFileButton.UseVisualStyleBackColor = true;
+            this._openFirmwareFileButton.Click += new System.EventHandler(this._openFirmwareFileButton_Click);
             // 
             // _outputRichTextBox
             // 
@@ -84,14 +95,15 @@
             this._outputRichTextBox.TabStop = false;
             this._outputRichTextBox.Text = "";
             // 
-            // _firmwareFileName
+            // _burnFirmwareButton
             // 
-            this._firmwareFileName.AutoSize = true;
-            this._firmwareFileName.Location = new System.Drawing.Point(233, 8);
-            this._firmwareFileName.Name = "_firmwareFileName";
-            this._firmwareFileName.Size = new System.Drawing.Size(93, 13);
-            this._firmwareFileName.TabIndex = 3;
-            this._firmwareFileName.Text = "FirmwareFileName";
+            this._burnFirmwareButton.Location = new System.Drawing.Point(678, 3);
+            this._burnFirmwareButton.Name = "_burnFirmwareButton";
+            this._burnFirmwareButton.Size = new System.Drawing.Size(75, 23);
+            this._burnFirmwareButton.TabIndex = 4;
+            this._burnFirmwareButton.Text = "Прошить";
+            this._burnFirmwareButton.UseVisualStyleBackColor = true;
+            this._burnFirmwareButton.Click += new System.EventHandler(this._burnFirmwareButton_Click);
             // 
             // MainWindow
             // 
@@ -99,7 +111,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(806, 433);
             this.Controls.Add(this._progPanel);
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
+            this.Resizable = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "STMProg";
             this._progPanel.ResumeLayout(false);
             this._progPanel.PerformLayout();
@@ -112,9 +127,10 @@
         private System.Windows.Forms.OpenFileDialog _openFirmwareFileDialog;
         private System.Windows.Forms.Panel _progPanel;
         private System.Windows.Forms.RichTextBox _outputRichTextBox;
-        private System.Windows.Forms.Button _openFirmwareFile;
+        private System.Windows.Forms.Button _openFirmwareFileButton;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label _firmwareFileName;
+        private System.Windows.Forms.Button _burnFirmwareButton;
     }
 }
 
