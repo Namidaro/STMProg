@@ -14,7 +14,7 @@ namespace STMProg.DevicesSpecifications
         }
         public string KeyFile
         {
-            get { return "stm32f417vgt6.cfg"; }
+            get { return "-f stm32f417vgt6.cfg"; }
         }
         public List<string> CommandQueue
         {
@@ -22,10 +22,10 @@ namespace STMProg.DevicesSpecifications
             {
                 return new List<string>
                 {
-                    "init",
-                    "reset halt",
-                    "flash write_image erase MR902.elf",
-                    "reset run"
+                    "-c init",
+                    "-c \"reset halt\"",
+                    "-c \"flash write_image erase MR902.elf\"",
+                    "-c \"reset run\""
                 };
             }
         }

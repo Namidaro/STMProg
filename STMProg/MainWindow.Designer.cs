@@ -30,11 +30,11 @@
         {
             this._openFirmwareFileDialog = new System.Windows.Forms.OpenFileDialog();
             this._progPanel = new System.Windows.Forms.Panel();
+            this._burnFirmwareButton = new System.Windows.Forms.Button();
             this._firmwareFileName = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this._devicesComboBox = new System.Windows.Forms.ComboBox();
             this._openFirmwareFileButton = new System.Windows.Forms.Button();
             this._outputRichTextBox = new System.Windows.Forms.RichTextBox();
-            this._burnFirmwareButton = new System.Windows.Forms.Button();
             this._progPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,13 +47,23 @@
             this._progPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._progPanel.Controls.Add(this._burnFirmwareButton);
             this._progPanel.Controls.Add(this._firmwareFileName);
-            this._progPanel.Controls.Add(this.comboBox1);
+            this._progPanel.Controls.Add(this._devicesComboBox);
             this._progPanel.Controls.Add(this._openFirmwareFileButton);
             this._progPanel.Controls.Add(this._outputRichTextBox);
             this._progPanel.Location = new System.Drawing.Point(23, 73);
             this._progPanel.Name = "_progPanel";
             this._progPanel.Size = new System.Drawing.Size(760, 337);
             this._progPanel.TabIndex = 0;
+            // 
+            // _burnFirmwareButton
+            // 
+            this._burnFirmwareButton.Location = new System.Drawing.Point(678, 3);
+            this._burnFirmwareButton.Name = "_burnFirmwareButton";
+            this._burnFirmwareButton.Size = new System.Drawing.Size(75, 23);
+            this._burnFirmwareButton.TabIndex = 4;
+            this._burnFirmwareButton.Text = "Прошить";
+            this._burnFirmwareButton.UseVisualStyleBackColor = true;
+            this._burnFirmwareButton.Click += new System.EventHandler(this._burnFirmwareButton_Click);
             // 
             // _firmwareFileName
             // 
@@ -64,13 +74,13 @@
             this._firmwareFileName.TabIndex = 3;
             this._firmwareFileName.Text = "FirmwareFileName";
             // 
-            // comboBox1
+            // _devicesComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(5, 3);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 2;
+            this._devicesComboBox.FormattingEnabled = true;
+            this._devicesComboBox.Location = new System.Drawing.Point(5, 3);
+            this._devicesComboBox.Name = "_devicesComboBox";
+            this._devicesComboBox.Size = new System.Drawing.Size(121, 21);
+            this._devicesComboBox.TabIndex = 2;
             // 
             // _openFirmwareFileButton
             // 
@@ -86,7 +96,6 @@
             // 
             this._outputRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._outputRichTextBox.DetectUrls = false;
-            this._outputRichTextBox.Enabled = false;
             this._outputRichTextBox.Location = new System.Drawing.Point(3, 30);
             this._outputRichTextBox.Name = "_outputRichTextBox";
             this._outputRichTextBox.ReadOnly = true;
@@ -94,16 +103,6 @@
             this._outputRichTextBox.TabIndex = 0;
             this._outputRichTextBox.TabStop = false;
             this._outputRichTextBox.Text = "";
-            // 
-            // _burnFirmwareButton
-            // 
-            this._burnFirmwareButton.Location = new System.Drawing.Point(678, 3);
-            this._burnFirmwareButton.Name = "_burnFirmwareButton";
-            this._burnFirmwareButton.Size = new System.Drawing.Size(75, 23);
-            this._burnFirmwareButton.TabIndex = 4;
-            this._burnFirmwareButton.Text = "Прошить";
-            this._burnFirmwareButton.UseVisualStyleBackColor = true;
-            this._burnFirmwareButton.Click += new System.EventHandler(this._burnFirmwareButton_Click);
             // 
             // MainWindow
             // 
@@ -128,7 +127,7 @@
         private System.Windows.Forms.Panel _progPanel;
         private System.Windows.Forms.RichTextBox _outputRichTextBox;
         private System.Windows.Forms.Button _openFirmwareFileButton;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox _devicesComboBox;
         private System.Windows.Forms.Label _firmwareFileName;
         private System.Windows.Forms.Button _burnFirmwareButton;
     }
