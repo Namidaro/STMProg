@@ -20,8 +20,8 @@ namespace STMProg
         MR901,
         MR902,
         ERASE
-
     }
+
 
     public enum KeyToOperate
     {
