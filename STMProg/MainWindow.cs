@@ -16,25 +16,69 @@ namespace STMProg
 {
     public partial class MainWindow : MetroForm
     {
-        private static readonly bool is64Bit = System.Environment.Is64BitOperatingSystem;
+        #region Private members
+        private static readonly bool _is64Bit = System.Environment.Is64BitOperatingSystem;
         private static readonly string _initialDirectory = Directory.GetCurrentDirectory();
+        private static string _openOCDDirectory;
+        private static readonly string _batFileName = "Execute.bat";
+        #endregion
+
+        #region Properties
+        public bool Is64Bit
+        {
+            get
+            {
+                return _is64Bit;
+            }
+        }
+
+        public string InitialDirectory
+        {
+            get
+            {
+                return _initialDirectory;
+            }
+        }
+
+        public string OpenOCDDirectory
+        { get
+            {
+                return _openOCDDirectory;
+            }
+            set
+            {
+                _openOCDDirectory = value;
+            }
+        }
+
+        public string BatFileName
+        {
+            get
+            {
+                return _batFileName;
+            }
+        }
+        #endregion
+
 
         public MainWindow()
         {
             InitializeComponent();
             _outputRichTextBox.Clear();
             _firmwareFileName.ResetText();
-            if (is64Bit)
+            if (Is64Bit)
             {
-                _openFirmwareFileDialog.InitialDirectory = _initialDirectory + "\\OpenOCD\\binx64\\";
+                _openFirmwareFileDialog.InitialDirectory = InitialDirectory + @"\OpenOCD\bin-x64\";
+                OpenOCDDirectory = _openFirmwareFileDialog.InitialDirectory;
             }
             else
             {
-                _openFirmwareFileDialog.InitialDirectory = _initialDirectory + "\\OpenOCD\\bin\\";
+                _openFirmwareFileDialog.InitialDirectory = InitialDirectory + @"\OpenOCD\bin\";
+                OpenOCDDirectory = _openFirmwareFileDialog.InitialDirectory;
             }
             _openFirmwareFileDialog.FileName = null;
             _openFirmwareFileDialog.Filter = "config files (*.elf)|*.elf|All files (*.*)|*.*";
-            
+
         }
 
 
@@ -51,13 +95,12 @@ namespace STMProg
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine(exception);
-                    throw;
+                    _outputRichTextBox.AppendText(exception.ToString());
                 }
             }
         }
 
-       
+
         private void _openFirmwareFileButton_Click(object sender, EventArgs e)
         {
             OnOpenFirmwareFileCommand();
@@ -65,11 +108,22 @@ namespace STMProg
 
         private void _burnFirmwareButton_Click(object sender, EventArgs e)
         {
-           OnBurnFirmwareCommand();
+            OnBurnFirmwareCommand();
         }
 
         private void OnBurnFirmwareCommand()
         {
+            string path = OpenOCDDirectory + BatFileName;
+            if (!File.Exists(path))
+            {
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    sw.Write("");
+                }
+            }
+
+
+
             Process proc = new Process();
             proc.StartInfo.FileName = "";
             proc.BeginOutputReadLine();
