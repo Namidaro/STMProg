@@ -55,8 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DevicesSpecifications\IDeviceSpecification.cs" />
-    <Compile Include="DevicesSpecifications\MR902DeviceSpecification.cs" />
+    <Compile Include="DevicesSpecification\IDeviceSpecification.cs" />
+    <Compile Include="DevicesSpecification\DeviceSpecification.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>

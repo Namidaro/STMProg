@@ -22,11 +22,10 @@ namespace STMProg
         private static readonly bool _is64Bit = System.Environment.Is64BitOperatingSystem;
         private static readonly string _initialDirectory = Directory.GetCurrentDirectory();
         private static string _openOCDDirectory;
-        private static readonly string _batFileName = "Execute.bat";
+        private string _procType;
+        private string _firmwareFile;
         private static string _openOCDExecName;
         private IDeviceSpecification _currentDevice;
-        public StringBuilder log = new StringBuilder();
-        WorkActions workActions = new WorkActions();
 
         #endregion
 
@@ -59,14 +58,6 @@ namespace STMProg
             }
         }
 
-        public string BatFileName
-        {
-            get
-            {
-                return _batFileName;
-            }
-        }
-
         public string OpenOCDExecName
         {
             get
@@ -78,6 +69,29 @@ namespace STMProg
                 _openOCDExecName = value;
             }
         }
+
+        public string ProcType
+        {
+            get
+            {
+                return _procType;
+            }
+            set
+            {
+                _procType = value;
+            }
+        }
+        public string FirmwareFile
+        {
+            get
+            {
+                return _firmwareFile;
+            }
+            set
+            {
+                _firmwareFile = value;
+            }
+        }
         #endregion
 
 
@@ -85,24 +99,30 @@ namespace STMProg
         {
             InitializeComponent();
             _outputRichTextBox.Clear();
-            _firmwareFileName.ResetText();
-            
-
+            _firmwareFileNameLabel.ResetText();
             //проверка системы на разрядность, в зависимости от нее выбирается исполняемый файл
-            if (Is64Bit)
+            try
             {
-                _openFirmwareFileDialog.InitialDirectory = InitialDirectory + @"\OpenOCD\bin-x64\";
-                OpenOCDDirectory = _openFirmwareFileDialog.InitialDirectory;
-                OpenOCDExecName = "openocd-x64-0.7.0.exe";
+                if (Is64Bit)
+                {
+                    _openFirmwareFileDialog.InitialDirectory = InitialDirectory + @"\OpenOCD\bin-x64\";
+                    OpenOCDDirectory = _openFirmwareFileDialog.InitialDirectory;
+                    OpenOCDExecName = "openocd-x64-0.7.0.exe";
+                }
+                else
+                {
+                    _openFirmwareFileDialog.InitialDirectory = InitialDirectory + @"\OpenOCD\bin-x86\";
+                    OpenOCDDirectory = _openFirmwareFileDialog.InitialDirectory;
+                    OpenOCDExecName = "openocd-0.7.0.exe";
+                }
+                _openFirmwareFileDialog.FileName = null;
+                _openFirmwareFileDialog.Filter = "файлы прошивки (*.elf)|*.elf|Все файлы (*.*)|*.*";
             }
-            else
+            catch (Exception ex)
             {
-                _openFirmwareFileDialog.InitialDirectory = InitialDirectory + @"\OpenOCD\bin-x86\";
-                OpenOCDDirectory = _openFirmwareFileDialog.InitialDirectory;
-                OpenOCDExecName = "openocd-0.7.0.exe";
+                MessageBox.Show(ex.Message.ToString());
             }
-            _openFirmwareFileDialog.FileName = null;
-            _openFirmwareFileDialog.Filter = "config files (*.elf)|*.elf|All files (*.*)|*.*";
+
         }
 
         private void OnOpenFirmwareFileCommand()
@@ -111,77 +131,84 @@ namespace STMProg
             {
                 try
                 {
-                    _firmwareFileName.Text = "Файл прошивки: " + _openFirmwareFileDialog.SafeFileName;
-
+                    _firmwareFileNameLabel.Text = "Файл прошивки: " + _openFirmwareFileDialog.SafeFileName;
+                    FirmwareFile = _openFirmwareFileDialog.SafeFileName;
                 }
                 catch (Exception exception)
                 {
-                    _outputRichTextBox.AppendText(exception.ToString());
+                    MessageBox.Show(exception.Message.ToString());
+                }
+            }
+            else
+            {
+                try
+                {
+                    _firmwareFileNameLabel.Text = "Файл прошивки: не выбран";
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message.ToString());
                 }
             }
         }
 
         private void _openFirmwareFileButton_Click(object sender, EventArgs e)
         {
-            _outputRichTextBox.AppendText(workActions.log.ToString());
+            //_outputRichTextBox.AppendText(workActions.log.ToString());
             OnOpenFirmwareFileCommand();
         }
 
-        private void _burnFirmwareButton_Click(object sender, EventArgs e)
+        private void OnBurnFirmwareCommand(WorkActions _workActions)
         {
-            OnBurnFirmwareCommand();
-
-        }
-
-        private void OnBurnFirmwareCommand()
-        {
-            
-            workActions.OpenOCDDirectory = OpenOCDDirectory;
-            workActions.OpenOCDExecName = OpenOCDExecName;
-            //надо проводить инициализацию устройства, спросить какие есть зависимости и т.п. для создания спецификаций
-            _currentDevice = new MR902DeviceSpecification();
-            string path = OpenOCDDirectory + BatFileName;
-            //удаляется старый фалй, если есть( в принципе не нужно, но на случай непредвиденных ситуаций)
+            _workActions.OpenOCDDirectory = OpenOCDDirectory;
+            _workActions.OpenOCDExecName = OpenOCDExecName;
+            _currentDevice = new DeviceSpecification(FirmwareFile, ProcType);
             try
             {
-                if (File.Exists(path)) File.Delete(path);
-
-            }
-            catch (Exception CannotDeleteFileException)
-            {
-                MessageBox.Show(CannotDeleteFileException.Message.ToString());
-            }
-            //пробуем создать bat-файл
-            try
-            {
-                if (workActions.CreateBatFile(path,_currentDevice))
+                try
                 {
-                    try
-                    {
-                        workActions.ExecuteFile("cmd.exe", @"cd " + OpenOCDDirectory, _currentDevice);
-                    }
-                    catch (Exception ThreadException)
-                    {
-                        MessageBox.Show(ThreadException.Message.ToString());
-                    }
+                    _workActions.ExecuteFile("cmd.exe", @"cd " + OpenOCDDirectory, _currentDevice);
+                }
+                catch (Exception ThreadException)
+                {
+                    MessageBox.Show(ThreadException.Message.ToString());
                 }
             }
-            catch (Exception CannotCreateFileException)
+            catch (Exception e)
             {
-                MessageBox.Show(CannotCreateFileException.Message.ToString());
+                MessageBox.Show(e.Message.ToString());
             }
-            //удаляется bat-файл после отработки
+        }
+
+        private void _burnDeviceButton_Click(object sender, EventArgs e)
+        {
+            WorkActions workActions = new WorkActions(FirmwareFile, ProcType);
+            OnBurnFirmwareCommand(workActions);
             try
             {
-                File.Delete(path);
+                do
+                {
+                    //полная хуйня, это так, для теста
+                    _outputRichTextBox.Clear();
+                } while (!workActions.ProcessCompleted);
+                _outputRichTextBox.AppendText(workActions.log.ToString());   
             }
             catch
             {
 
             }
-
         }
 
+        private void _procTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OnProcTypeChanged();
+        }
 
+        private void OnProcTypeChanged()
+        {
+            ProcType = _procTypeComboBox.SelectedText;
+        }
+
+        
     }
 }
