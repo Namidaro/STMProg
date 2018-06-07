@@ -29,6 +29,8 @@ namespace STMProg
 
         #endregion
 
+        
+
         #region Properties
         public bool Is64Bit
         {
@@ -116,7 +118,7 @@ namespace STMProg
                     OpenOCDExecName = "openocd-0.7.0.exe";
                 }
                 _openFirmwareFileDialog.FileName = null;
-                _openFirmwareFileDialog.Filter = "файлы прошивки (*.elf)|*.elf|Все файлы (*.*)|*.*";
+                _openFirmwareFileDialog.Filter = "Файлы прошивки (*.elf)|*.elf|Все файлы (*.*)|*.*";
             }
             catch (Exception ex)
             {

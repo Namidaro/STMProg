@@ -8,7 +8,7 @@ namespace STMProg.DevicesSpecifications
 {
     interface IDeviceSpecification
     {
-        string FirmwareFile { get; }
-        string ProcType { get; }
+        string FirmwareFile { get; set; }
+        string ProcType { get; set; }
     }
 }

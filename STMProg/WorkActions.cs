@@ -17,7 +17,7 @@ namespace STMProg
         private static string _openOCDDirectory;
         private static string _openOCDExecName;
         public StringBuilder log = new StringBuilder();
-        private StringBuilder _commandString = new StringBuilder();
+        private readonly StringBuilder _commandString = new StringBuilder();
         SynchronizationContext _syncContext;
         private bool _processCompleted;
 
@@ -77,7 +77,7 @@ namespace STMProg
         #endregion
 
         #region Ctor
-        public WorkActions(string _inputfirmwareFile, string _inputProcType)
+        public WorkActions(string inputfirmwareFile, string inputProcType)
         {
 
         }
