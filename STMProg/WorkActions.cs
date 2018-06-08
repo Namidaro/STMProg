@@ -8,6 +8,7 @@ using System.Threading;
 using System.IO;
 using STMProg.DevicesSpecifications;
 
+
 namespace STMProg
 {
     class WorkActions
@@ -20,7 +21,7 @@ namespace STMProg
         private readonly StringBuilder _commandString = new StringBuilder();
         SynchronizationContext _syncContext;
         private bool _processCompleted;
-        public delegate void Completed();
+        //public delegate void Completed();
 
 
         #endregion
@@ -105,6 +106,7 @@ namespace STMProg
             using (Process executeProcess = new Process())
             {
                 ProcessCompleted = false;
+                log.Clear();
                 _syncContext = SynchronizationContext.Current;
                 CreateCommandString(deviceSpecification);
                 executeProcess.StartInfo.FileName = _fileName;
@@ -124,11 +126,11 @@ namespace STMProg
                 executeProcess.BeginErrorReadLine();
                 executeProcess.StandardInput.WriteLine(_pathString);
                 executeProcess.StandardInput.WriteLineAsync(CommandString);
-                executeProcess.WaitForExit(600);
+                executeProcess.WaitForExit(6000);
             }
         }
-
-        public event Completed OnLog;
+        
+        //public event Completed OnLog;
     }
 }
 

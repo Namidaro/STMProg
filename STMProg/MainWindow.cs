@@ -30,6 +30,7 @@ namespace STMProg
         public ProcessorType processorType = new ProcessorType();
         WorkActions workActions = new WorkActions();
 
+
         #region Properties
         public bool Is64Bit
         {
@@ -119,7 +120,8 @@ namespace STMProg
                 _openFirmwareFileDialog.Filter = "Файлы прошивки (*.elf)|*.elf|Все файлы (*.*)|*.*";
 
                 _procTypeComboBox.Items.AddRange(processorType.ProcessorList.Keys.ToArray());
-                workActions.OnLog += this.WriteLog;
+                //workActions.OnLog += this.WriteLog;
+
             }
             catch (Exception ex)
             {
@@ -127,11 +129,18 @@ namespace STMProg
             }
         }
 
-        public void WriteLog()
-        {
-            _outputRichTextBox.Clear();
-            _outputRichTextBox.AppendText(workActions.log.ToString());
-        }
+        //public void WriteLog()
+        //{
+        //    try
+        //    {
+        //        _outputRichTextBox.AppendText(workActions.log.ToString());
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message.ToString());
+
+        //    }
+        //}
 
         private void OnOpenFirmwareFileCommand()
         {
@@ -168,11 +177,12 @@ namespace STMProg
 
         private void OnBurnFirmwareCommand()
         {
-            workActions.OpenOCDDirectory = OpenOCDDirectory;
-            workActions.OpenOCDExecName = OpenOCDExecName;
-            _currentDevice = new DeviceSpecification(FirmwareFile, ProcType);
             try
             {
+                _outputRichTextBox.Clear();
+                workActions.OpenOCDDirectory = OpenOCDDirectory;
+                workActions.OpenOCDExecName = OpenOCDExecName;
+                _currentDevice = new DeviceSpecification(FirmwareFile, ProcType);
                 try
                 {
                     workActions.ExecuteFile("cmd.exe", @"cd " + OpenOCDDirectory, _currentDevice);
@@ -181,6 +191,7 @@ namespace STMProg
                 {
                     MessageBox.Show(ThreadException.Message.ToString());
                 }
+                timer1.Start();
             }
             catch (Exception e)
             {
@@ -206,6 +217,20 @@ namespace STMProg
             }
         }
 
+        //TODO: resovle this shit
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                _outputRichTextBox.Clear();
+                _outputRichTextBox.AppendText(workActions.log.ToString());
+                timer1.Stop();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
 
+        }
     }
 }

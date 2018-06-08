@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this._openFirmwareFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
             this._procTypeLabel = new System.Windows.Forms.Label();
@@ -36,6 +37,7 @@
             this._procTypeComboBox = new System.Windows.Forms.ComboBox();
             this._openFirmwareFileButton = new System.Windows.Forms.Button();
             this._outputRichTextBox = new System.Windows.Forms.RichTextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,6 +118,11 @@
             this._outputRichTextBox.TabStop = false;
             this._outputRichTextBox.Text = "";
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -143,6 +150,7 @@
         private System.Windows.Forms.ComboBox _procTypeComboBox;
         private System.Windows.Forms.Button _openFirmwareFileButton;
         private System.Windows.Forms.RichTextBox _outputRichTextBox;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
