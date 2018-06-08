@@ -20,6 +20,8 @@ namespace STMProg
         private readonly StringBuilder _commandString = new StringBuilder();
         SynchronizationContext _syncContext;
         private bool _processCompleted;
+        public delegate void Completed();
+
 
         #endregion
 
@@ -77,15 +79,16 @@ namespace STMProg
         #endregion
 
         #region Ctor
-        public WorkActions(string inputfirmwareFile, string inputProcType)
+        public WorkActions()
         {
-
+            
         }
         #endregion
 
         private void ToLog(string _toLog)
         {
             _syncContext.Post(_ => log.AppendLine(_toLog), null);
+            //OnLog();
         }
 
         private void CreateCommandString(IDeviceSpecification _currentDevice)
@@ -104,7 +107,7 @@ namespace STMProg
                 ProcessCompleted = false;
                 _syncContext = SynchronizationContext.Current;
                 CreateCommandString(deviceSpecification);
-                executeProcess.StartInfo.FileName = "cmd.exe";
+                executeProcess.StartInfo.FileName = _fileName;
                 executeProcess.StartInfo.Arguments = CommandString;
                 executeProcess.StartInfo.CreateNoWindow = true;
                 executeProcess.StartInfo.Verb = "runas";
@@ -121,16 +124,11 @@ namespace STMProg
                 executeProcess.BeginErrorReadLine();
                 executeProcess.StandardInput.WriteLine(_pathString);
                 executeProcess.StandardInput.WriteLineAsync(CommandString);
-                executeProcess.WaitForExit(10);
-                executeProcess.Exited += ExecuteProcess_Exited;
-
+                executeProcess.WaitForExit(600);
             }
         }
 
-        private void ExecuteProcess_Exited(object sender, EventArgs e)
-        {
-            ProcessCompleted = true;
-        }
+        public event Completed OnLog;
     }
 }
 

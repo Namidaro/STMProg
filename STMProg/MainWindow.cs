@@ -27,8 +27,8 @@ namespace STMProg
         private static string _openOCDExecName;
         private IDeviceSpecification _currentDevice;
         #endregion
-
-        
+        public ProcessorType processorType = new ProcessorType();
+        WorkActions workActions = new WorkActions();
 
         #region Properties
         public bool Is64Bit
@@ -95,7 +95,6 @@ namespace STMProg
         }
         #endregion
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -118,12 +117,20 @@ namespace STMProg
                 }
                 _openFirmwareFileDialog.FileName = null;
                 _openFirmwareFileDialog.Filter = "Файлы прошивки (*.elf)|*.elf|Все файлы (*.*)|*.*";
+
+                _procTypeComboBox.Items.AddRange(processorType.ProcessorList.Keys.ToArray());
+                workActions.OnLog += this.WriteLog;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message.ToString());
             }
+        }
 
+        public void WriteLog()
+        {
+            _outputRichTextBox.Clear();
+            _outputRichTextBox.AppendText(workActions.log.ToString());
         }
 
         private void OnOpenFirmwareFileCommand()
@@ -159,16 +166,16 @@ namespace STMProg
             OnOpenFirmwareFileCommand();
         }
 
-        private void OnBurnFirmwareCommand(WorkActions _workActions)
+        private void OnBurnFirmwareCommand()
         {
-            _workActions.OpenOCDDirectory = OpenOCDDirectory;
-            _workActions.OpenOCDExecName = OpenOCDExecName;
+            workActions.OpenOCDDirectory = OpenOCDDirectory;
+            workActions.OpenOCDExecName = OpenOCDExecName;
             _currentDevice = new DeviceSpecification(FirmwareFile, ProcType);
             try
             {
                 try
                 {
-                    _workActions.ExecuteFile("cmd.exe", @"cd " + OpenOCDDirectory, _currentDevice);
+                    workActions.ExecuteFile("cmd.exe", @"cd " + OpenOCDDirectory, _currentDevice);
                 }
                 catch (Exception ThreadException)
                 {
@@ -183,21 +190,7 @@ namespace STMProg
 
         private void _burnDeviceButton_Click(object sender, EventArgs e)
         {
-            WorkActions workActions = new WorkActions(FirmwareFile, ProcType);
-            OnBurnFirmwareCommand(workActions);
-            try
-            {
-                do
-                {
-                    //полная хуйня, это так, для теста
-                    _outputRichTextBox.Clear();
-                } while (!workActions.ProcessCompleted);
-                _outputRichTextBox.AppendText(workActions.log.ToString());   
-            }
-            catch
-            {
-
-            }
+            OnBurnFirmwareCommand();
         }
 
         private void _procTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -207,9 +200,12 @@ namespace STMProg
 
         private void OnProcTypeChanged()
         {
-            ProcType = _procTypeComboBox.SelectedText;
+            if (processorType.ProcessorList.ContainsKey(_procTypeComboBox.SelectedItem.ToString()))
+            {
+                ProcType = processorType.ProcessorList.ElementAt(processorType.ProcessorList.IndexOfKey(_procTypeComboBox.SelectedItem.ToString())).Value;
+            }
         }
 
-        
+
     }
 }
