@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="DevicesSpecification\IDeviceSpecification.cs" />
     <Compile Include="DevicesSpecification\DeviceSpecification.cs" />
-    <Compile Include="Enum.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

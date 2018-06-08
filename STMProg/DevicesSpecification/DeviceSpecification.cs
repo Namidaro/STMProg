@@ -8,27 +8,19 @@ namespace STMProg.DevicesSpecifications
 {
     class DeviceSpecification : IDeviceSpecification
     {
-        #region Private members
-        private string _firmwareFile;
-        private string _procType;
-        #endregion
-
+        
         #region Properties
-        public string FirmwareFile
-        {
-            get { return _firmwareFile; }
-        }
-        public string ProcType
-        {
-            get { return _procType; }
-        }
+        public string FirmwareFile { get; set; }
+
+        public string ProcType { get; set; }
+
         #endregion
 
         #region Ctor
-        public DeviceSpecification(string _inputFirmwareFile, string _inputProcType)
+        public DeviceSpecification(string inputFirmwareFile, string inputProcType)
         {
-            _firmwareFile = _inputFirmwareFile;
-            _procType = _inputProcType;
+            FirmwareFile = inputFirmwareFile;
+            ProcType = inputProcType;
         }
         #endregion
     }
