@@ -26,7 +26,6 @@ namespace STMProg
         private string _firmwareFile;
         private static string _openOCDExecName;
         private IDeviceSpecification _currentDevice;
-
         #endregion
 
         #region Properties
