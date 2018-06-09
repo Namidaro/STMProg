@@ -23,7 +23,6 @@ namespace STMProg
         private bool _processCompleted;
         //public delegate void Completed();
 
-
         #endregion
 
         #region Properties
@@ -94,11 +93,15 @@ namespace STMProg
 
         private void CreateCommandString(IDeviceSpecification _currentDevice)
         {
+            _commandString.Clear();
             _commandString.Append(OpenOCDExecName);
             _commandString.Append(" -f ");
             _commandString.Append(_currentDevice.ProcType);
             _commandString.Append(@" -c init -c ""reset halt"" -c ""flash write_image erase " + _currentDevice.FirmwareFile);
-            _commandString.Append(@" "" - c ""reset run"" - c shutdown");
+            _commandString.Append(@""" -c ""reset run"" -c shutdown");
+            log.AppendLine("Сформирована командная строка: " + CommandString);
+            log.AppendLine("");
+            log.AppendLine("Выполнение команды: ");
         }
 
         public void ExecuteFile(string _fileName, string _pathString, IDeviceSpecification deviceSpecification)
@@ -126,10 +129,9 @@ namespace STMProg
                 executeProcess.BeginErrorReadLine();
                 executeProcess.StandardInput.WriteLine(_pathString);
                 executeProcess.StandardInput.WriteLineAsync(CommandString);
-                executeProcess.WaitForExit(6000);
+                executeProcess.WaitForExit(10);
             }
         }
-        
         //public event Completed OnLog;
     }
 }

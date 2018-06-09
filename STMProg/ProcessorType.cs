@@ -13,13 +13,9 @@ namespace STMProg
 
         public ProcessorType()
         {
-            ProcessorList.Add("STM103", "stm32f103rbt6.cfg");
-            ProcessorList.Add("STM417", "stm32f417vgt6.cfg");
+            ProcessorList.Add("STM32F100Series", "stm32f103rbt6.cfg");
+            ProcessorList.Add("STM32F400Series", "stm32f417vgt6.cfg");
         }    
-
-
-
-
 
     }
 }

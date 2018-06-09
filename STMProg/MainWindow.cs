@@ -120,6 +120,7 @@ namespace STMProg
                 _openFirmwareFileDialog.Filter = "Файлы прошивки (*.elf)|*.elf|Все файлы (*.*)|*.*";
 
                 _procTypeComboBox.Items.AddRange(processorType.ProcessorList.Keys.ToArray());
+                _procTypeComboBox.SelectedItem = _procTypeComboBox.Items[0];
                 //workActions.OnLog += this.WriteLog;
 
             }
@@ -179,6 +180,7 @@ namespace STMProg
         {
             try
             {
+                _burnDeviceButton.Enabled = false;
                 _outputRichTextBox.Clear();
                 workActions.OpenOCDDirectory = OpenOCDDirectory;
                 workActions.OpenOCDExecName = OpenOCDExecName;
@@ -191,6 +193,7 @@ namespace STMProg
                 {
                     MessageBox.Show(ThreadException.Message.ToString());
                 }
+                //TODO: костыль
                 timer1.Start();
             }
             catch (Exception e)
@@ -217,11 +220,12 @@ namespace STMProg
             }
         }
 
-        //TODO: resovle this shit
+        //TODO: resovle this kostyl
         private void timer1_Tick(object sender, EventArgs e)
         {
             try
             {
+                _burnDeviceButton.Enabled = true;
                 _outputRichTextBox.Clear();
                 _outputRichTextBox.AppendText(workActions.log.ToString());
                 timer1.Stop();

@@ -108,8 +108,9 @@
             // 
             // _outputRichTextBox
             // 
-            this._outputRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._outputRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this._outputRichTextBox.DetectUrls = false;
+            this._outputRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this._outputRichTextBox.Location = new System.Drawing.Point(3, 30);
             this._outputRichTextBox.Name = "_outputRichTextBox";
             this._outputRichTextBox.ReadOnly = true;
