@@ -27,9 +27,10 @@ namespace STMProg
         private static string _openOCDExecName;
         private IDeviceSpecification _currentDevice;
         #endregion
+        SynchronizationContext _syncContext;
         public ProcessorType processorType = new ProcessorType();
         WorkActions workActions = new WorkActions();
-
+        public byte time;
 
         #region Properties
         public bool Is64Bit
@@ -121,7 +122,7 @@ namespace STMProg
 
                 _procTypeComboBox.Items.AddRange(processorType.ProcessorList.Keys.ToArray());
                 _procTypeComboBox.SelectedItem = _procTypeComboBox.Items[0];
-                //workActions.OnLog += this.WriteLog;
+                workActions.OnLog += this.WriteLog;
 
             }
             catch (Exception ex)
@@ -130,18 +131,20 @@ namespace STMProg
             }
         }
 
-        //public void WriteLog()
-        //{
-        //    try
-        //    {
-        //        _outputRichTextBox.AppendText(workActions.log.ToString());
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message.ToString());
+        public void WriteLog()
+        {
+            _syncContext = workActions._syncContext;
 
-        //    }
-        //}
+            try
+            {
+                _syncContext.Post(_ => _outputRichTextBox.Clear(), null);
+                _syncContext.Post(_ => _outputRichTextBox.AppendText(workActions.log.ToString()), null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+        }
 
         private void OnOpenFirmwareFileCommand()
         {
@@ -193,17 +196,19 @@ namespace STMProg
                 {
                     MessageBox.Show(ThreadException.Message.ToString());
                 }
-                //TODO: костыль
-                timer1.Start();
+                _burnDeviceButton.Enabled = true;
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message.ToString());
+                _burnDeviceButton.Enabled = true;
             }
+
         }
 
         private void _burnDeviceButton_Click(object sender, EventArgs e)
         {
+            time = 0;
             OnBurnFirmwareCommand();
         }
 
@@ -220,21 +225,5 @@ namespace STMProg
             }
         }
 
-        //TODO: resovle this kostyl
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                _burnDeviceButton.Enabled = true;
-                _outputRichTextBox.Clear();
-                _outputRichTextBox.AppendText(workActions.log.ToString());
-                timer1.Stop();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
-            }
-
-        }
     }
 }

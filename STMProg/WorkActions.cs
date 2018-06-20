@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO;
 using STMProg.DevicesSpecifications;
+using STMProg;
 
 
 namespace STMProg
@@ -19,24 +20,13 @@ namespace STMProg
         private static string _openOCDExecName;
         public StringBuilder log = new StringBuilder();
         private readonly StringBuilder _commandString = new StringBuilder();
-        SynchronizationContext _syncContext;
-        private bool _processCompleted;
-        //public delegate void Completed();
+        public SynchronizationContext _syncContext;
+        public delegate void Completed();
 
         #endregion
 
         #region Properties
-        public bool ProcessCompleted
-        {
-            get
-            {
-                return _processCompleted;
-            }
-            set
-            {
-                _processCompleted = value;
-            }
-        }
+        
         public string CommandString
         {
             get
@@ -81,14 +71,16 @@ namespace STMProg
         #region Ctor
         public WorkActions()
         {
-            
         }
         #endregion
 
         private void ToLog(string _toLog)
         {
-            _syncContext.Post(_ => log.AppendLine(_toLog), null);
-            //OnLog();
+            if (_toLog != null)
+            {
+                _syncContext.Post(_ => log.AppendLine(_toLog), null);
+                OnLog();
+            }
         }
 
         private void CreateCommandString(IDeviceSpecification _currentDevice)
@@ -108,7 +100,6 @@ namespace STMProg
         {
             using (Process executeProcess = new Process())
             {
-                ProcessCompleted = false;
                 log.Clear();
                 _syncContext = SynchronizationContext.Current;
                 CreateCommandString(deviceSpecification);
@@ -117,22 +108,28 @@ namespace STMProg
                 executeProcess.StartInfo.CreateNoWindow = true;
                 executeProcess.StartInfo.Verb = "runas";
                 executeProcess.StartInfo.UseShellExecute = false;
-                executeProcess.StartInfo.RedirectStandardOutput = true;
+                //executeProcess.StartInfo.RedirectStandardOutput = true;
                 executeProcess.StartInfo.RedirectStandardError = true;
                 executeProcess.StartInfo.RedirectStandardInput = true;
                 executeProcess.StartInfo.StandardErrorEncoding = Encoding.GetEncoding(866);
-                executeProcess.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);
+                //executeProcess.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);
                 executeProcess.OutputDataReceived += (sender, args) => ToLog(args.Data);
                 executeProcess.ErrorDataReceived += (sender, args) => ToLog(args.Data);
+
                 executeProcess.Start();
                 //executeProcess.BeginOutputReadLine();
                 executeProcess.BeginErrorReadLine();
                 executeProcess.StandardInput.WriteLine(_pathString);
-                executeProcess.StandardInput.WriteLineAsync(CommandString);
-                executeProcess.WaitForExit(10);
+                executeProcess.StandardInput.WriteLine(CommandString);
+                executeProcess.StandardInput.Flush();
+                executeProcess.StandardInput.Close();
+                executeProcess.StandardInput.Dispose();
+                executeProcess.WaitForExit(0);
             }
         }
-        //public event Completed OnLog;
+
+        
+        public event Completed OnLog;
     }
 }
 
