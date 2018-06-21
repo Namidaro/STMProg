@@ -22,7 +22,6 @@ namespace STMProg
         private readonly StringBuilder _commandString = new StringBuilder();
         public SynchronizationContext _syncContext;
         public delegate void Completed();
-
         #endregion
 
         #region Properties

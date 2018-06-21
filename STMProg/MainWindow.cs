@@ -154,6 +154,8 @@ namespace STMProg
                 {
                     _firmwareFileNameLabel.Text = "Файл прошивки: " + _openFirmwareFileDialog.SafeFileName;
                     FirmwareFile = _openFirmwareFileDialog.SafeFileName;
+                    TryCopyFirmwareFile(_openFirmwareFileDialog.FileName, _openFirmwareFileDialog.SafeFileName);
+
                 }
                 catch (Exception exception)
                 {
@@ -173,9 +175,23 @@ namespace STMProg
             }
         }
 
+        private void TryCopyFirmwareFile(string path, string name)
+        {
+            try
+            {
+                if (!File.Exists(OpenOCDDirectory + name))
+                {
+                    File.Copy(path, OpenOCDDirectory + name);
+                }
+            }
+            catch (Exception CreateFileEx)
+            {
+                MessageBox.Show(CreateFileEx.Message.ToString());
+            }
+        }
+
         private void _openFirmwareFileButton_Click(object sender, EventArgs e)
         {
-            //_outputRichTextBox.AppendText(workActions.log.ToString());
             OnOpenFirmwareFileCommand();
         }
 
@@ -208,7 +224,6 @@ namespace STMProg
 
         private void _burnDeviceButton_Click(object sender, EventArgs e)
         {
-            time = 0;
             OnBurnFirmwareCommand();
         }
 
