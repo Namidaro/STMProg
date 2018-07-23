@@ -113,7 +113,7 @@ namespace STMProg
                 }
                 else
                 {
-                    _openFirmwareFileDialog.InitialDirectory = InitialDirectory + @"\OpenOCD\bin-x86\";
+                    _openFirmwareFileDialog.InitialDirectory = InitialDirectory + @"\OpenOCD\bin\";
                     OpenOCDDirectory = _openFirmwareFileDialog.InitialDirectory;
                     OpenOCDExecName = "openocd-0.7.0.exe";
                 }
@@ -179,9 +179,17 @@ namespace STMProg
         {
             try
             {
-                if (!File.Exists(OpenOCDDirectory + name))
+                if (!path.Equals(OpenOCDDirectory + name))
                 {
-                    File.Copy(path, OpenOCDDirectory + name);
+                    if(File.Exists(OpenOCDDirectory+name))
+                    {
+                        File.Delete(OpenOCDDirectory + name);
+                        File.Copy(path, OpenOCDDirectory + name);
+                    }
+                    else
+                    {
+                        File.Copy(path, OpenOCDDirectory + name);
+                    }
                 }
             }
             catch (Exception CreateFileEx)

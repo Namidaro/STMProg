@@ -105,13 +105,13 @@ namespace STMProg
                 executeProcess.StartInfo.FileName = _fileName;
                 executeProcess.StartInfo.Arguments = CommandString;
                 executeProcess.StartInfo.CreateNoWindow = true;
-                executeProcess.StartInfo.Verb = "runas";
+                //executeProcess.StartInfo.Verb = "runas";
                 executeProcess.StartInfo.UseShellExecute = false;
-                //executeProcess.StartInfo.RedirectStandardOutput = true;
+                executeProcess.StartInfo.RedirectStandardOutput = true;
                 executeProcess.StartInfo.RedirectStandardError = true;
                 executeProcess.StartInfo.RedirectStandardInput = true;
                 executeProcess.StartInfo.StandardErrorEncoding = Encoding.GetEncoding(866);
-                //executeProcess.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);
+                executeProcess.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);
                 executeProcess.OutputDataReceived += (sender, args) => ToLog(args.Data);
                 executeProcess.ErrorDataReceived += (sender, args) => ToLog(args.Data);
 
@@ -120,7 +120,7 @@ namespace STMProg
                 executeProcess.BeginErrorReadLine();
                 executeProcess.StandardInput.WriteLine(_pathString);
                 executeProcess.StandardInput.WriteLine(CommandString);
-                executeProcess.StandardInput.Flush();
+                //executeProcess.StandardInput.Flush();
                 executeProcess.StandardInput.Close();
                 executeProcess.StandardInput.Dispose();
                 executeProcess.WaitForExit(0);
