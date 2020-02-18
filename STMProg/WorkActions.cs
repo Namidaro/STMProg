@@ -25,7 +25,7 @@ namespace STMProg
         #endregion
 
         #region Properties
-        
+
         public string CommandString
         {
             get
@@ -77,7 +77,15 @@ namespace STMProg
         {
             if (_toLog != null)
             {
-                _syncContext.Post(_ => log.AppendLine(_toLog), null);
+                if (_toLog.Contains("shutdown command invoked"))
+                {
+                    _syncContext.Post(_ => log.AppendLine(_toLog + Environment.NewLine + "Прошивка завершена"), null);
+                }
+                else
+                if (!_toLog.Contains("Error: couldn't bind to socket: No error")&&!_toLog.Contains("Попытка записи"))
+                {
+                    _syncContext.Post(_ => log.AppendLine(_toLog), null);
+                }
                 OnLog();
             }
         }
@@ -127,7 +135,7 @@ namespace STMProg
             }
         }
 
-        
+
         public event Completed OnLog;
     }
 }

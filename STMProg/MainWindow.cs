@@ -179,9 +179,9 @@ namespace STMProg
         {
             try
             {
-                if (!path.Equals(OpenOCDDirectory + name))
+                if (!path.Equals(OpenOCDDirectory + name,StringComparison.CurrentCultureIgnoreCase))
                 {
-                    if(File.Exists(OpenOCDDirectory+name))
+                    if (File.Exists(OpenOCDDirectory+name))
                     {
                         File.Delete(OpenOCDDirectory + name);
                         File.Copy(path, OpenOCDDirectory + name);
